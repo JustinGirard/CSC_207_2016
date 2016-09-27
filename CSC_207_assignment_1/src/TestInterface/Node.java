@@ -3,7 +3,23 @@ package TestInterface;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+* Node
+* 
+* <P> General Node interface. Allows for creating of a hierarchy, 
+* and the search of the created hierarchy. Typical implementation is a file system.
+* 
+* @author CSC 207 Instructors
+* @version 1.0
+*/
 public interface Node {
+
+	/***
+	 * FileType()
+	 * 
+	 * <P> Enumeration of file type, directory, file
+	 * 
+	 */
 	public enum FileType {directory,file};
 
 	/***
@@ -19,6 +35,7 @@ public interface Node {
 	 * Set the name of the current node
 	 * 
 	 * @param name of the file/directory
+	 * 
 	 */
 	public void setName(String name);
 	
@@ -27,7 +44,7 @@ public interface Node {
 	 * 
 	 * Set the parent node of this current file/directory
 	 * 
-	 * @param parent Node
+	 * @param parent node for this node
 	 */
 	public void setParent(Node parent);
 

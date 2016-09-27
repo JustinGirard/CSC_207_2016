@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.*;
-import javax.tools.JavaCompiler;
 
+/**
+* FileWindow
+* 
+* <P>Creates a file and browser window that is capable of opening a directory
+* @author CSC 207 Instructors
+* @version 1.0
+*/
 public class FileWindow implements ActionListener {
 	private JButton openButton;// = new JButton("Disable middle button", leftButtonIcon);
 	private JFileChooser fileChooser;// = new JFileChooser();
@@ -17,19 +23,74 @@ public class FileWindow implements ActionListener {
 
 	JTextArea textArea;
 
-	/***
-	 * toString()
-	 * @return the String name of the node
-	 */
+	/**
+	* Constructor
+	* 
+	* <P> Creates the file window, assuming no specific starting directory
+	*/
 	public FileWindow() 
 	{
 		this.DoCreate();
 	}
+	
+	/**
+	* Show
+	* 
+	* <P> make the file window visible
+	*/
 	public void Show()
 	{
 		newFrame.setVisible(true);				
 	}
 	
+	
+	/**
+	* main
+	* 
+	* <P> Create and show a window
+	* 
+	* @param argsv an array of arguments for the file window, currently unused
+	*/
+	public static void main(String argsv[]) 
+	{
+		FileWindow f = new FileWindow();
+		f.Show();
+	}
+		
+	/***
+	 * runOnDirectory
+	 * 
+	 * <P> Build a directory tree given a string directory.
+	 * 
+	 * @param directory The directory to be searched for a tree structure
+	 */
+	public Node runOnDirectory(String directory)
+	{
+        File file = new File(directory);
+        if(file.exists())
+        {
+        	label.setText("Selected File " +  file.getAbsolutePath());
+	    	Node tree = this.createNewNode();
+	    	tree.buildFileTree(file);  
+        	this.printFileOutput(tree);
+	    	return tree;
+        }
+        else
+        {
+	        label.setText("Directory does not exist");
+	        return null;
+        }
+	}
+	
+/// --------------------------------------------------------------------------	
+/// ---- Service methods below -----------------------------------------------	
+/// --------------------------------------------------------------------------	
+	
+	/**
+	* DoCreate
+	* 
+	* <P> Create the file browser window, which may or not be made visible.
+	*/
 	private void DoCreate()
 	{
 		// Create Frame
@@ -67,43 +128,16 @@ public class FileWindow implements ActionListener {
 		
 		newFrame.pack();		
 	}
-	
+
 	/***
-	 * toString()
-	 * @return the String name of the node
+	 * printFileOutput
+	 * 
+	 * <P> Print the file output from a directory, as accessed from a depth first search.
+	 * 
+	 * @param e the event object.
+	 * 
 	 */
-	public static void main(String argsv[]) 
-	{
-		FileWindow f = new FileWindow();
-		f.Show();
-	}
-	
-	private Node CreateNewNode()
-	{
-		return new DemoFileNode();
-	}
-	
-	public Node runOnDirectory(String directory)
-	{
-        File file = new File(directory);
-        if(file.exists())
-        {
-        	label.setText("Selected File " +  file.getAbsolutePath());
-	    	Node tree = this.CreateNewNode();
-	    	tree.buildFileTree(file);  
-        	this.PrintFileOutput(tree);
-	    	return tree;
-        }
-        else
-        {
-	        label.setText("Directory does not exist");
-	        return null;
-        }
-	}
-	
-	
-	
-	private void PrintFileOutput(Node n) {
+	private void printFileOutput(Node n) {
 		this.textArea.setText("Searching .. ");
 		if(n != null) {
 			String toShow = "";
@@ -118,8 +152,12 @@ public class FileWindow implements ActionListener {
 	}
 	
 	/***
-	 * toString()
-	 * @return the String name of the node
+	 * actionPerformed
+	 * 
+	 * <P> Handle form events in a custom manner. Currently just implementation for a button
+	 * 
+	 * @param ActionEvent e -- the event object
+	 * 
 	 */
 	public void actionPerformed(ActionEvent e) {
 	    //Handle open button action.
@@ -129,15 +167,27 @@ public class FileWindow implements ActionListener {
 	        if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            File file = fileChooser.getSelectedFile();
 	            label.setText("Selected File" +  file.getAbsolutePath());
-	        	Node fileTree = this.CreateNewNode();
+	        	Node fileTree = this.createNewNode();
 	        	fileTree.buildFileTree(file);  
-	        	this.PrintFileOutput(fileTree);
+	        	this.printFileOutput(fileTree);
 	        } 
 	        else {
 	            label.setText("No Path Selected");
 	        }
 	   }	
 	}
+	
+	/**
+	* createNewNode
+	* 
+	* <P> Create a File Node for use in the framework
+	* 
+	* @param String argsv, an array of arguments for the process
+	*/
+	private Node createNewNode() {
+		return new DemoFileNode();
+	}
+	
 }
 
 
